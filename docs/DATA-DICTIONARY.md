@@ -5,3 +5,5 @@
 每票第一版不填写 replaces。后续版本只能替代当前生效版，分支或缺基版整票阻断结算。已支付额为各版本中最大累计已付值，待付=最终应付−累计已付；负待付表示待收回。
 同编号同原值仅计一次；同编号不同原值全部隔离。空文件、全空行和仅表头分别报错。原始输入计数包括空行及重复表头，对账会分别解释。
 归档封存保存逐版证据、隔离原因和运行摘要，非支付执行系统。数据使用虚构编号，不连接实际支付渠道。
+
+到期处置：上下文 `retention_days` 为保留期天数（缺省30），`disputes` 为争议登记票号列表；执行时也可经请求体 `disputes` 追加。处置计划逐票给出判定（可处置/保留/已处置）与保留依据，原因码：MANUAL_HOLD 争议登记未闭合、DISPUTE_QUARANTINE 隔离证据关联、CORRECTION_OPEN 更正链未闭合、EVIDENCE_SHARED 证据被待处理票引用、EVIDENCE_MISMATCH 票据与封存证据对不上。处置记录字段：disposal_id（批号-D序号）、revision、seal、as_of 基准日、disposed（票号、版本、金额、依据行、证据摘要 evidence_sha256）、retained（票号与原因）、quarantine_retained、digest 处置摘要。记录按 (run_id,revision) 与 (run_id,digest) 唯一，重跑返回既有结果不重复处置。

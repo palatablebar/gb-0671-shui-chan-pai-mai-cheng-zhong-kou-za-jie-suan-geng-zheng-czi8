@@ -13,6 +13,7 @@
 | M5 更正裁决 | 查看并执行更正裁决 | `POST /api/correction` | `app/modules/correction/rules.py` | `tests/test_correction.py` |
 | M6 应付对账 | 查看并执行应付对账 | `POST /api/reconcile` | `app/modules/reconcile/rules.py` | `tests/test_reconcile.py` |
 | M7 结算归档 | 查看并执行结算归档 | `POST /api/archive` | `app/modules/archive/rules.py` | `tests/test_archive.py` |
+| M8 到期处置 | 查看并执行到期处置 | `POST /api/disposal` | `app/modules/disposal/rules.py` | `tests/test_disposal.py` |
 
 ## 陷阱登记
 
@@ -34,6 +35,10 @@
 ## 对账规则
 
 输入=采纳原始行+隔离行+空行+同值重复行+重复表头。计价版本总额与生效票总额分别展示，避免把更正前后重复求和。最终应付=已付+待付，负待付为退款。
+
+## 到期处置规则
+
+保留期=生成日期+`retention_days`（默认30天，Asia/Shanghai 日历日），基准日达到保留期即到期。处置按票权衡，不整批延期也不整批清空：争议登记（`disputes`）、隔离证据关联、更正链未闭合、证据被待处理票引用（连带至不动点）、票据与封存证据对不上，满足其一即保留；隔离证据行全数保留。封存摘要（seal）复算不符或保留期未届满时整批暂缓，返回409且不写入。执行写入单事务完成，`(run_id,revision)` 与 `(run_id,digest)` 唯一约束保证重跑不重复处置；失败回滚后上一版处置结果原样保留。处置记录只增不改，runs 表原始档案索引不被处置修改，处置后复核与凭证下载照常。
 
 ## 已知不覆盖
 

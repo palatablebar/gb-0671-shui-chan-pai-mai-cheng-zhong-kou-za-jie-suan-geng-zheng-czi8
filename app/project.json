@@ -10,7 +10,8 @@
     "扣杂竞价",
     "更正裁决",
     "应付对账",
-    "结算归档"
+    "结算归档",
+    "到期处置"
   ],
   "rule": "双次称重先配对，再按品类扣杂；更正只能替代指定版本，禁止重复支付",
   "lane": "L1",
@@ -29,7 +30,8 @@
     "auction",
     "correction",
     "reconcile",
-    "archive"
+    "archive",
+    "disposal"
   ],
   "labels": {
     "id": "记录号",
@@ -63,6 +65,21 @@
     "repeated_header": "重复表头",
     "row_balanced": "行守恒",
     "money_balanced": "金额守恒",
-    "blocked": "阻断项"
+    "blocked": "阻断项",
+    "decision": "处置判定",
+    "basis": "保留依据",
+    "run_id": "批号",
+    "source": "样例",
+    "generated_at": "生成日期",
+    "retention_until": "保留期至",
+    "expired": "已到期",
+    "status": "状态",
+    "revision": "版本",
+    "disposal_id": "处置单号",
+    "as_of": "处置基准日",
+    "disposed": "处置票",
+    "retained": "保留票",
+    "digest": "处置摘要",
+    "created_at": "处置时间"
   }
 }

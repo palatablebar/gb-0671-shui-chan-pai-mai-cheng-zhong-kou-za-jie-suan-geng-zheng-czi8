@@ -5,6 +5,10 @@ document.querySelector('#run').addEventListener('click',async(event)=>{event.tar
 document.querySelector('#pause').addEventListener('click',event=>{state.paused=!state.paused;event.target.textContent=state.paused?'继续日志':'暂停日志';document.querySelector('#log-state').textContent=state.paused?'已暂停':'滚动中';});
 document.querySelector('#filter').addEventListener('input',event=>{const text=event.target.value.trim();document.querySelectorAll('.primary-panel tbody tr').forEach(row=>row.hidden=!row.textContent.includes(text));});
 const review=document.querySelector('#review');if(review)review.addEventListener('click',async()=>{try{const run=await fetch('/api/runs/'+review.dataset.id).then(r=>r.json());const result=await request('/api/runs/'+review.dataset.id+'/review',{revision:run.revision});feedback.textContent=result.status;}catch(error){feedback.textContent=error.message;}});
+const asOf=document.querySelector('#as-of');
+if(asOf)asOf.addEventListener('change',()=>{const url=new URL(location.href);url.searchParams.set('as_of',asOf.value);location.href=url;});
+const dispose=document.querySelector('#dispose');
+if(dispose)dispose.addEventListener('click',async()=>{dispose.disabled=true;try{const id=dispose.dataset.id;const current=await fetch('/api/runs/'+id+'/disposal?as_of='+asOf.value).then(r=>r.json());const result=await request('/api/runs/'+id+'/disposal',{as_of:asOf.value,revision:current.revision});feedback.textContent=result.changed?`处置单 ${result.record.disposal_id} · 处置 ${result.record.disposed.length} 票 · 保留 ${result.record.retained.length} 票`:'无新增可处置票，未重复处置';const url=new URL(location.href);url.searchParams.set('as_of',asOf.value);location.href=url;}catch(error){feedback.textContent=error.message;dispose.disabled=false;}});
 const selected=new URL(location.href).searchParams.get('dataset');if(selected)document.querySelector('#dataset').value=selected;
 
 const filePicker=document.querySelector('#csv-file');
